@@ -1,11 +1,7 @@
 <?php
 session_start();
-require_once("classes/DB.php");
-$stmt = DB::getInstance()->prepare("SELECT * FROM Users");
-$stmt->execute();
-$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-//$result = $stmt->fetchAll();
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -67,7 +63,7 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         <div class="position-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="dashboard.php">
+              <a class="nav-link active" aria-current="page" href="dashboard.html">
                 <span data-feather="home"></span>
                 Dashboard
               </a>
@@ -79,7 +75,7 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="products.php">
+              <a class="nav-link" href="#">
                 <span data-feather="shopping-cart"></span>
                 Products
               </a>
@@ -108,7 +104,7 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Dashboard</h1>
+          <h1 class="h2">Add Product</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
               <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -121,54 +117,41 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
           </div>
         </div>
 
-        <h2>Users</h2>
-        <div class="table-responsive">
-          <table class="table table-striped table-sm">
-            <thead>
-              <tr>
-                <th scope="col">Username</th>
-                <th scope="col">Email Address</th>
-                <th scope="col">Role</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+        <form method="POST" action="./prodvalidation.php">
+          <div class="col-md-6">
 
-                <!-- <th scope="col">Header</th>
-              <th scope="col">Header</th> -->
-              </tr>
-            </thead>
-            <!-- <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-          </tbody> -->
-            <?php
-            foreach ($stmt->fetchAll() as $k => $v) {
-                echo  '<form method="POST" action="access.php">
-              <tr><td>' . $v['Username'] . '</td>
-              <td>'.$v['Email'].'</td>
-              <td>'.$v['Role'].'</td>
-              <td>'.$v['Status'].'</td>
-              <td><input type="text" hidden name="Status" value='.$v['Status'].'>
-              <input type="text" hidden name="Email" value='.$v['Email'].'>
-              <button type="submit" name="approved" value="Submit">Approved</button>
-              <button type="submit" name="delete" value="Submit">Delete</button></td></tr></form>';
-            }
+            <label for="inputEmail4" class="form-label">Product ID</label>
+            <input type="text" name="Id" class="form-control" id="inputEmail4">
+          </div>
+          <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Product Name</label>
+            <input type="text" name="Name" class="form-control" id="inputPassword4">
+          </div>
+          <div class="col-12">
+            <label for="inputAddress" class="form-label">Product Price</label>
+            <input type="text" name="Price" class="form-control" id="inputAddress" placeholder="">
+          </div>
+          <div class="col-12">
+            <label for="inputAddress2" class="form-label">Product Quantity</label>
+            <input type="text" name="Quantity" class="form-control" id="inputAddress2" placeholder="">
+          </div>
+          <div class="col-12">
+            <label for="formFile" class="form-label">Image</label>
+            <input class="form-control" name="Image" type="file" id="formFile">
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">Category</label>
+            <input type="text" name="Category" class="form-control" id="inputCity">
+          </div>
+          <br>
+          <div class="col-12 text-danger">
+            <?php echo isset($_SESSION["add_Alert"]) ? $_SESSION["add_Alert"] : ""; ?>
+          </div>
+          <div class="col-12">
 
-
-            ?>
-          </table>
-        </div>
+            <button type="submit" name="addPro" class="btn btn-primary">Add Product</button>
+          </div>
+        </form>
       </main>
     </div>
   </div>

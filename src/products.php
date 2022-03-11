@@ -1,10 +1,14 @@
 <?php
 session_start();
-require_once("classes/DB.php");
-$stmt = DB::getInstance()->prepare("SELECT * FROM Users");
+include_once("classes/DB.php");
+include("classes/Product.php");
+$stmt = DB::getInstance()->prepare("SELECT * FROM Products");
+
+//echo $stmt;
 $stmt->execute();
-$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 //$result = $stmt->fetchAll();
+print_r($result);
 ?>
 <!doctype html>
 <html lang="en">
@@ -79,7 +83,7 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="products.php">
+              <a class="nav-link" href="#">
                 <span data-feather="shopping-cart"></span>
                 Products
               </a>
@@ -103,12 +107,45 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
               </a>
             </li>
           </ul>
+
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Saved reports</span>
+            <a class="link-secondary" href="#" aria-label="Add a new report">
+              <span data-feather="plus-circle"></span>
+            </a>
+          </h6>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Current month
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Last quarter
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Social engagement
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Year-end sale
+              </a>
+            </li>
+          </ul>
         </div>
       </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Dashboard</h1>
+          <h1 class="h2">Products</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
               <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -121,53 +158,64 @@ $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
           </div>
         </div>
 
-        <h2>Users</h2>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+          <div class="col-12">
+            <label class="visually-hidden" for="inlineFormInputGroupUsername">Search</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Enter id,name...">
+            </div>
+          </div>
+
+
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+          <div class="col-12">
+            <a class="btn btn-success" href="add-product.php">Add Product</a>
+          </div>
+        </form>
         <div class="table-responsive">
           <table class="table table-striped table-sm">
+            
             <thead>
-              <tr>
-                <th scope="col">Username</th>
-                <th scope="col">Email Address</th>
-                <th scope="col">Role</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-
-                <!-- <th scope="col">Header</th>
-              <th scope="col">Header</th> -->
-              </tr>
-            </thead>
-            <!-- <tbody>
             <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
+              <th scope="col">Product ID</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Product Price</th>
+              <th scope="col">Image</th>
+              <th scope="col">Category</th>
+              <th scope="col">Action</th>
             </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-          </tbody> -->
-            <?php
-            foreach ($stmt->fetchAll() as $k => $v) {
-                echo  '<form method="POST" action="access.php">
-              <tr><td>' . $v['Username'] . '</td>
-              <td>'.$v['Email'].'</td>
-              <td>'.$v['Role'].'</td>
-              <td>'.$v['Status'].'</td>
-              <td><input type="text" hidden name="Status" value='.$v['Status'].'>
-              <input type="text" hidden name="Email" value='.$v['Email'].'>
-              <button type="submit" name="approved" value="Submit">Approved</button>
-              <button type="submit" name="delete" value="Submit">Delete</button></td></tr></form>';
+          </thead>
+          <tbody>
+          <?php
+        
+           
+            //$html1 = "";
+            foreach ($result as $k => $v) {
+                echo '<form method="POST" action="edit&delete-Product.php"><tr>
+            <td>'.$v['product_id'].'</td>
+            <td>'.$v['product_name'].'</td>
+            <td>'.$v['product_price'].'</td>
+            <td><img src="image/'.$v['Image'].'" height="60"></td>
+            <td>'.$v['Category'].'</td>
+            <td><input type="hidden" name="id" value="'.$v['product_id'].'"><button type="submit" value="'.$v['product_id'].'" name="delete" >Delete</button>
+            <a id="edit" href="edit.php?id='.$v['product_id'].'" name="edit">Edit</a></td>
+            </tr></form>';
             }
-
-
             ?>
+          </tbody>
           </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
         </div>
       </main>
     </div>

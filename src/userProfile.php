@@ -1,5 +1,7 @@
-<?php 
+<?php
 include_once("function.php");
+echo "fff";
+print_r($_SESSION);
 ?>
 <!doctype html>
 <html lang="en">
