@@ -73,8 +73,10 @@ class User extends DB
                 //header("Location:login.php");
                 exit(0);
             } else if ($v['Email'] == $this->email && $v['Password'] == $this->password && $v['Role'] == 'User' && $v['Status'] == 'Approved') {
-                $this->editProfile();
-                return;
+                //$this->editProfile();
+                header("location:shop.php");
+                //return;
+                exit(0);
             }
         }
         header("Location:login.php");

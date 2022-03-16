@@ -21,7 +21,7 @@ class Product extends DB
     }
     public function addProduct()
     {
-        $q = 'INSERT INTO Products(product_id, product_name, product_price, product_quantity, Image, Category)
+        $q = 'INSERT INTO Products(product_id, product_name, product_price, quantity, Image, Category)
         VALUES("' . $this->id . '","' .
             $this->name . '","' . $this->price . '","' . $this->quantity . '","' . $this->image . '","' .
             $this->category . '");';
